@@ -6,5 +6,8 @@ app = Flask(__name__)
 def home():
       return 'Hello World!'
 
-
+@app.route('/about')
+def about():
+      return 'About page...'
+      
 app.run(port = 5000)
