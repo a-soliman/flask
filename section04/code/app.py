@@ -16,7 +16,7 @@ class Item(Resource):
     def post(self, name):
         item = {'name': name, 'price': 12.00}
         items.append(item)
-        return {'message': 'created item', 'item': item }
+        return {'message': 'created item', 'item': item }, 201
     
     def delete(self, name):
         for i in range(len(items)):
