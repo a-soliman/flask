@@ -17,6 +17,13 @@ class Item(Resource):
         item = {'name': name, 'price': 12.00}
         items.append(item)
         return {'message': 'created item', 'item': item }
+    
+    def delete(self, name):
+        for i in range(len(items)):
+            if items[i]['name'] == name:
+                items.pop(i)
+                return {'message': 'item deleted'}
+        return {'message': 'item was not found.'}
 
 api.add_resource(Item, '/item/<string:name>')
 app.run(port=5000)
