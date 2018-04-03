@@ -14,11 +14,9 @@ class Items(Resource):
 
 class Item(Resource):
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return {'item': item}
-        return {'message': 'item was not found'}, 404
-    
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        return {'item': item} 200 if item is not None else 404
+
     def post(self, name):
         data = request.get_json()
         item = {'name': name, 'price': data['price']}
