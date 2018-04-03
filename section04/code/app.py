@@ -6,6 +6,12 @@ api = Api(app)
 
 items = []
 
+class Items(Resource):
+    def get(self):
+        return {'items': items}, 200
+
+
+
 class Item(Resource):
     def get(self, name):
         for item in items:
@@ -25,5 +31,7 @@ class Item(Resource):
                 return {'message': 'item deleted'}
         return {'message': 'item was not found.'}, 404
 
+api.add_resource(Items, '/items')
 api.add_resource(Item, '/item/<string:name>')
-app.run(port=5000)
+
+app.run(port=5000, debug=True)
