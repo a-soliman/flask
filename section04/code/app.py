@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
@@ -20,9 +20,21 @@ class Item(Resource):
         return {'message': 'item was not found'}, 404
     
     def post(self, name):
-        item = {'name': name, 'price': 12.00}
+        data = request.get_json()
+        item = {'name': name, 'price': data['price']}
         items.append(item)
         return {'message': 'created item', 'item': item }, 201
+
+    def put(self, name):
+        data = request.get_json()
+        
+        for item in items:
+            if item['name'] == name:
+                item['price'] = data['price']
+                return {'message': 'updated item', 'item': item}, 201
+        item = {'name': name, 'price': data['price']}
+        items.append(item)
+        return {'message': 'created item', 'item': item}, 201
     
     def delete(self, name):
         for i in range(len(items)):
