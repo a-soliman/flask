@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
@@ -26,6 +26,13 @@ stores = [
     ]
     }
 ]
+
+# GET home
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
 # POST /store data: {name:}
 @app.route('/store', methods=['POST'])
 def create_store():
@@ -76,5 +83,17 @@ def get_items_in_store(name):
         
     return jsonify({ 'message': 'Store was not found'})
 
+
+# Delete /store
+@app.route('/store', methods=['DELETE'])
+def delete_store():
+    request_data = request.get_json()
+    print(request_data)
+    for store in stores:
+        if store['name'] == request_data['name']:
+            del stores[store]
+            return jsonify({'message': 'removed store', 'stores': store})
+    
+    return jsonify({ 'message': 'store was not found.'})
 
 app.run(port = 5000)
