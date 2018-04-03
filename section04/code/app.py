@@ -11,7 +11,7 @@ class Item(Resource):
         for item in items:
             if item['name'] == name:
                 return {'item': item}
-        return {'message': 'item was not found'}
+        return {'message': 'item was not found'}, 404
     
     def post(self, name):
         item = {'name': name, 'price': 12.00}
@@ -23,7 +23,7 @@ class Item(Resource):
             if items[i]['name'] == name:
                 items.pop(i)
                 return {'message': 'item deleted'}
-        return {'message': 'item was not found.'}
+        return {'message': 'item was not found.'}, 404
 
 api.add_resource(Item, '/item/<string:name>')
 app.run(port=5000)
