@@ -8,7 +8,7 @@ items = []
 
 class Items(Resource):
     def get(self):
-        return {'items': items}
+        return {'items': items}, 200
 
 
 
