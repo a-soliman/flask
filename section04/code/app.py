@@ -29,11 +29,12 @@ class Item(Resource):
 
     def put(self, name):
         data = request.get_json()
-        
-        for item in items:
-            if item['name'] == name:
-                item['price'] = data['price']
-                return {'message': 'updated item', 'item': item}, 201
+
+        item =  next(filter(lambda x: x['name'] == name, items), None)
+        if items is not None:
+            item['price'] = data['price']
+            return {'message': 'updated item', 'item': item}, 201
+
         item = {'name': name, 'price': data['price']}
         items.append(item)
         return {'message': 'created item', 'item': item}, 201
