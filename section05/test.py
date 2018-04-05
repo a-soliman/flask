@@ -22,6 +22,21 @@ insert_query = "INSERT INTO users VALUES (?, ?, ?)"
 # execute the cursor to insert the user
 cursor.execute(insert_query, user)
 
+
+# insert multible users
+users = [
+    (2, 'mike', '123456'),
+    (3, 'john', '123456')
+]
+
+cursor.executemany(insert_query, users)
+
+
+# select query
+select_query = "SELECT * FROM users"
+
+for row in cursor.execute(select_query):
+    print(row)
 # commit the checnges
 connection.commit()
 
