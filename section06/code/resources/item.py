@@ -51,8 +51,12 @@ class Item(Resource):
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
 
+        print('============ HERE ===============')
+        print('============ HERE ===============')
+        print('============ HERE ===============')
+
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {'message': 'An error occurred inserting item.'}, 500 #internal server error
 
@@ -64,34 +68,20 @@ class Item(Resource):
         data = Item.parser.parse_args()
 
         item = ItemModel.find_by_name(name)
-        updated_item = ItemModel(name, data['price'])
 
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return {'message': 'An error occurred inserting item.'}, 500 #internal server error
+            item = ItemModel(name, data['price'])
         else:
-            try:
-                updated_item.update()
-            except:
-                return {'message': 'An error occurred updating item.'}, 500 #internal server error
+            item.price = data['price']
+        
+        item.save_to_db()
 
-        return updated_item.json(), 200
+        return item.json(), 201
     
     def delete(self, name):
-        
-        if not ItemModel.find_by_name(name):
-            return {'message': 'could not find an item with the provided name'}
+        item = ItemModel.find_by_name(name)
 
-        connection  = sqlite3.connect('data.db')
-        cursor      = connection.cursor()
+        if item:
+            item.delete_from_db()
 
-        query       = "DELETE FROM items WHERE name=?"
-
-        cursor.execute(query, (name,))
-
-        connection.commit()
-        connection.close()
-
-        return {'message': 'item Deleted'}
+        return {'message': 'Item deleted'}
